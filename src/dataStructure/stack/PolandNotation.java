@@ -29,6 +29,7 @@ public class PolandNotation {
     }
 
     //将逆波兰表达式，依次将数据和运算符放入到ArrayList中
+    //该方法将以空格分隔的字符串的每个字符放入一个list中
     public static List<String> getListString(String suffixExpression) {
         //将suffixExpression 分割
         String[] split = suffixExpression.split(" ");
@@ -39,7 +40,7 @@ public class PolandNotation {
         return list;
     }
 
-    //将中缀表达式转成对应的list
+    //第一步=======将中缀表达式转成对应的list
     public static List<String> toInfixExpressionList(String s) {
         List<String> ls = new ArrayList<>();
         int i = 0;
@@ -61,42 +62,9 @@ public class PolandNotation {
         return ls;
     }
 
-    //完成对逆波兰表达式的运算
-    public static int calculate(List<String> ls) {
-        //创建给栈，只需要一个栈即可
-        Stack<String> stack = new Stack<>();
-        //遍历
-        for (String item : ls) {
-            //使用正则表达式取出数
-            if (item.matches("\\d+")) {//匹配的是多位数
-                //入栈
-                stack.push(item);
-            } else {
-                //pop出两个数，并运算，再入栈
-                int num2 = Integer.parseInt(stack.pop());
-                int num1 = Integer.parseInt(stack.pop());
-                //判断符号
-                int res = 0;
-                if (item.equals("+")) {
-                    res = num1 + num2;
-                } else if (item.equals("-")) {
-                    res = num1 - num2;
-                } else if (item.equals("*")) {
-                    res = num1 * num2;
-                } else if ((item.equals("/"))) {
-                    res = num1 / num2;
-                } else {
-                    throw new RuntimeException("运算符有误");
-                }
-                //把res入栈
-                stack.push("" + res);
-            }
-        }
-        //最后留在stack中的数据就是运算结果
-        return Integer.parseInt(stack.pop());
-    }
 
-    //将中缀表达式的list转化为后缀表达式对应的list
+
+    //第二步======将中缀表达式的list转化为后缀表达式对应的list
     public static List<String> parseSuffixExpressionList(List<String> ls) {
         //定义两个栈
         Stack<String> s1 = new Stack<>();//符号栈
@@ -130,6 +98,42 @@ public class PolandNotation {
             s2.add(s1.pop());
         }
         return s2;
+    }
+
+
+    //第三步=========完成对逆波兰表达式的运算,将逆波兰表达式转化为list传进来
+    public static int calculate(List<String> ls) {
+        //创建给栈，只需要一个栈即可
+        Stack<String> stack = new Stack<>();
+        //遍历
+        for (String item : ls) {
+            //使用正则表达式取出数
+            if (item.matches("\\d+")) {//匹配的是多位数
+                //入栈
+                stack.push(item);
+            } else {
+                //pop出两个数，并运算，再入栈
+                int num2 = Integer.parseInt(stack.pop());
+                int num1 = Integer.parseInt(stack.pop());
+                //判断符号
+                int res = 0;
+                if (item.equals("+")) {
+                    res = num1 + num2;
+                } else if (item.equals("-")) {
+                    res = num1 - num2;
+                } else if (item.equals("*")) {
+                    res = num1 * num2;
+                } else if ((item.equals("/"))) {
+                    res = num1 / num2;
+                } else {
+                    throw new RuntimeException("运算符有误");
+                }
+                //把res入栈
+                stack.push("" + res);
+            }
+        }
+        //最后留在stack中的数据就是运算结果
+        return Integer.parseInt(stack.pop());
     }
 }
 
